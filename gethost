@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo ""
+echo "$(tput setaf 6) Automated host command for a list of hosts"
+echo " Usage: gethost list.txt"
+echo ""
+for count1 in $(cat $1 | wc -l); do echo "$(tput setaf 2) Sending request to "$count1" hosts"; done
+for host in $(cat $1); do timeout 5 host $host | grep -v NXDOMAIN ; done | tee $1_gethost
+echo ""
+for count2 in $(cat $1_gethost | awk -F' ' '{print $1}' | sort -u | wc -l); do echo "$(tput setaf 1) Resolved "$count2" live hosts"; done
